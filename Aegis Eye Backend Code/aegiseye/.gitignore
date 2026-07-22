@@ -1,0 +1,27 @@
+# Models (too large for GitHub — store on Google Drive)
+*.pt
+*.pth
+*.onnx
+
+# Datasets
+/datasets/
+*.zip
+
+# Output files
+/clips/
+/reports/
+/logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+aegiseye-env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
