@@ -1,4 +1,0 @@
-Download any accident video from YouTube using yt-dlp:
-  yt-dlp -o sample.mp4 "https://youtube.com/watch?v=VIDEO_ID"
-
-Or use your phone as a camera with IP Webcam app (Android).
