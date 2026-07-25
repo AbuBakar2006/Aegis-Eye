@@ -187,6 +187,8 @@ def _display_thread(display_q, fps, stop):
     delay = config.DISPLAY_DELAY_SECONDS
     frames_shown = 0
     t_start = None
+    window_name = "AegisEye"
+    window_initialized = False
 
     while not stop.is_set():
         try:
@@ -204,7 +206,14 @@ def _display_thread(display_q, fps, stop):
         if wait > 0:
             time.sleep(wait)
 
-        cv2.imshow("AegisEye", frame)
+        if not window_initialized:
+            cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+            cv2.setWindowProperty(window_name, cv2.WND_PROP_TOPMOST, 1)
+            cv2.imshow(window_name, frame)
+            cv2.setWindowProperty(window_name, cv2.WND_PROP_TOPMOST, 0)
+            window_initialized = True
+        else:
+            cv2.imshow(window_name, frame)
 
         # Pace display at real FPS
         if t_start is None:
