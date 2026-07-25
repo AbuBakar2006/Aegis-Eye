@@ -3,11 +3,59 @@ AegisEye — Main Entry Point
 
 Usage:
     python main.py                      (GUI video selector)
-    python main.py test_videos/file.mp4 (direct path override)
+    python main.py Test_Videos/file.mp4 (direct path override)
 """
 
 import sys
 import os
+import subprocess
+
+# Ensure AegisEye directory is on python path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# ── Self-Healing Dependency Check ───────────────────────────
+def _ensure_dependencies():
+    missing = []
+    checks = [
+        ("opencv-python", "cv2"),
+        ("ultralytics", "ultralytics"),
+        ("fastapi", "fastapi"),
+        ("onnxruntime", "onnxruntime"),
+        ("fpdf2", "fpdf"),
+        ("twilio", "twilio"),
+        ("imageio-ffmpeg", "imageio_ffmpeg"),
+    ]
+    for pkg, module in checks:
+        try:
+            __import__(module)
+        except ImportError:
+            missing.append(pkg)
+    
+    if missing:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        req_file = os.path.join(project_root, "requirements.txt")
+        print("\n" + "=" * 65)
+        print(" ⚠️ Missing dependencies detected:", ", ".join(missing))
+        print(" 🔄 Auto-installing required packages from requirements.txt...")
+        print("=" * 65 + "\n")
+        
+        cmd = [sys.executable, "-m", "pip", "install"]
+        if os.path.exists(req_file):
+            cmd.extend(["-r", req_file])
+        else:
+            cmd.extend(missing)
+            
+        try:
+            subprocess.check_call(cmd)
+            print("\n" + "=" * 65)
+            print(" ✅ All dependencies installed successfully! Proceeding...")
+            print("=" * 65 + "\n")
+        except Exception as err:
+            print(f" ❌ Auto-install failed: {err}")
+            print(" Please run manually: pip install -r requirements.txt\n")
+
+_ensure_dependencies()
+
 import json
 import threading
 import tkinter as tk
@@ -41,7 +89,7 @@ def _save_settings(frame_skip, display_delay):
 
 def select_video_gui():
     """Show a tkinter GUI to pick a video file and configure settings."""
-    video_dir = os.path.join(config.PROJECT_ROOT, "test_videos")
+    video_dir = os.path.join(config.PROJECT_ROOT, "Test_Videos")
     videos = []
     if os.path.isdir(video_dir):
         for f in os.listdir(video_dir):

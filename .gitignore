@@ -1,14 +1,14 @@
 # Models (too large for GitHub — download from Kaggle)
-models/*.pt
-models/*.onnx
-models/*.engine
+Models/*.pt
+Models/*.onnx
+Models/*.engine
 *.pt
 *.onnx
 
 # Test Videos (heavy binaries)
-test_videos/*.mp4
-test_videos/*.avi
-test_videos/*.mov
+Test_Videos/*.mp4
+Test_Videos/*.avi
+Test_Videos/*.mov
 
 # Storage outputs
 Storage/BlackBox-Clips/*
@@ -17,9 +17,6 @@ Storage/Reports/*
 !Storage/Reports/.gitkeep
 Storage/Logs/*
 !Storage/Logs/.gitkeep
-clips/
-reports/
-logs/
 
 # User Local Overrides
 settings.json

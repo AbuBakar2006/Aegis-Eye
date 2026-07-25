@@ -10,8 +10,8 @@ PROJECT_ROOT = os.path.dirname(BASE_DIR)
 SETTINGS_FILE = os.path.join(PROJECT_ROOT, "settings.json")
 
 # ── Models ──────────────────────────────────────────────────
-MODEL_A_PATH = os.path.join(PROJECT_ROOT, "models", "model_A_v2_best.pt")
-MODEL_B_PATH = os.path.join(PROJECT_ROOT, "models", "model_B_best.pt")
+MODEL_A_PATH = os.path.join(PROJECT_ROOT, "models", "Model_A.pt")
+MODEL_B_PATH = os.path.join(PROJECT_ROOT, "models", "Model_B.pt")
 
 # ── Detection (defaults) ──────────────────────────────────
 CONFIDENCE_THRESHOLD = 0.5
@@ -32,7 +32,7 @@ if os.path.exists(SETTINGS_FILE):
 CAMERAS = [
     {
         "id": "cam_01",
-        "url": os.path.join(PROJECT_ROOT, "test_videos", "sample.mp4"),
+        "url": os.path.join(PROJECT_ROOT, "Test_Videos", "sample.mp4"),
         "gps": {"lat": 31.5204, "lng": 74.3587},
     },
 ]
