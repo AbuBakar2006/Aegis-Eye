@@ -13,7 +13,7 @@
 2. **The tkinter popup is a ROUGH placeholder UI** — it exists only to avoid terminal inputs. The real UI/UX (web dashboard) still has to be properly designed. Do not polish the tkinter window; that effort belongs in the dashboard.
 3. **Record every change you make** in `CHANGELOG.md` (template provided). Every commit: what changed, why, and the result.
 4. **Test videos are from YouTube** — they are pure test videos, NOT from the training datasets. The models have never seen them. This matters: it proves the models generalize.
-5. After every run, **check `clips/` and `reports/` folders** to verify the blackbox clip and PDF report were generated.
+5. After every run, **check `Storage/BlackBox-Clips/` and `Storage/Reports/` folders** to verify the blackbox clip and PDF report were generated.
 
 ---
 
@@ -43,9 +43,9 @@ AegisEye watches CCTV/video feeds and automatically:
 | F6 | Insurance PDF Report | ✅ DONE | Auto-generated with hyperlinked clip path |
 | — | Performance Optimization | ✅ DONE — **DO NOT TOUCH** | ONNX + 3-thread broadcast delay |
 | — | Video Selector UI | ✅ DONE (rough) | tkinter popup — placeholder only |
-| F7 | Web Dashboard | ⬜ PENDING | FastAPI skeleton exists in `api/server.py`, frontend not started |
-| F8 | Multi-Camera | ⬜ PENDING | Threading structure ready in main.py, untested |
-| — | Real Twilio SMS | ⬜ PENDING | Just needs account credentials in config.py |
+| F7 | Web Dashboard | ⬜ PENDING | FastAPI skeleton exists in `aegiseye/api/server.py`, frontend pending |
+| F8 | Multi-Camera | ⬜ PENDING | Threading structure ready in aegiseye/main.py, untested |
+| — | Real Twilio SMS | ⬜ PENDING | Just needs account credentials in aegiseye/config.py |
 | — | Proper UI/UX Design | ⬜ PENDING | Dashboard needs real design work — tkinter is temporary |
 
 ---
@@ -53,31 +53,29 @@ AegisEye watches CCTV/video feeds and automatically:
 ## 3. Folder Structure
 
 ```
-aegiseye/
-├── models/                      ← AI model files
-│   ├── model_A_v2_best.pt       (PyTorch original — backup)
-│   ├── model_A_v2_best.onnx     (optimized — actually used)
-│   ├── model_B_best.pt          (PyTorch original — backup)
-│   └── model_B_best.onnx        (optimized — actually used)
-├── core/                        ← detection engine
-│   ├── detector.py              (3-thread pipeline — THE HEART)
-│   ├── buffer.py                (rolling 10-sec frame memory)
-│   ├── severity.py              (F3 — crash severity scoring)
-│   └── blackbox.py              (F4 — MP4 clip export)
-├── services/                    ← external outputs
-│   ├── alert.py                 (F5 — Twilio SMS)
-│   └── report.py                (F6 — PDF generation)
-├── api/                         ← dashboard backend (F7, pending)
-│   └── server.py                (FastAPI skeleton)
-├── frontend/                    ← dashboard UI (F7, not started)
-├── test_videos/                 ← put test videos here (YouTube downloads)
-├── clips/                       ← auto-saved blackbox clips (check after runs)
-├── reports/                     ← auto-saved PDF reports (check after runs)
-├── logs/                        ← reserved for future logging
-├── config.py                    ← ALL settings in one place
-├── main.py                      ← entry point + video selector popup
-├── export_onnx.py               (run once to create ONNX models)
-├── settings.json                (saved UI settings — auto-created)
+c:\Users\mabub\Aegis-Eye\
+├── aegiseye/                            <-- Backend Python Package
+│   ├── api/                             <-- FastAPI Endpoints (server.py)
+│   ├── core/                            <-- Detection Engine (detector, buffer, severity, blackbox)
+│   ├── services/                        <-- Alerts & Reports (alert, report)
+│   ├── config.py                        <-- All settings in one place
+│   ├── export_onnx.py                   <-- ONNX Converter Script
+│   └── main.py                          <-- Application Entry Point & Launcher
+│
+├── FrontEnd/                            <-- Dashboard UI (React / Reflex)
+├── Documentation/                       <-- Architecture Docs & Training Notebooks
+├── models/                              <-- AI Model Files (.pt & .onnx)
+│   ├── model_A_v2_best.pt               (PyTorch original — backup)
+│   ├── model_A_v2_best.onnx             (optimized — actually used)
+│   ├── model_B_best.pt                  (PyTorch original — backup)
+│   └── model_B_best.onnx                (optimized — actually used)
+├── Storage/                             <-- Generated Runtime Outputs
+│   ├── BlackBox-Clips/                  <-- Auto-saved blackbox MP4 clips
+│   ├── Reports/                         <-- Auto-saved PDF incident reports
+│   └── Logs/                            <-- Application execution logs
+├── test_videos/                         <-- Put test videos here (YouTube downloads)
+├── settings.json                        (saved UI settings — auto-created)
+├── CHANGELOG.md                         (version history & commit record)
 └── requirements.txt
 ```
 
@@ -112,10 +110,10 @@ pip install ultralytics opencv-python numpy fastapi "uvicorn[standard]" fpdf2 tw
 #    model_A_v2_best.pt  and  model_B_best.pt
 
 # 7. Create the ONNX optimized versions (run ONCE):
-python export_onnx.py
+python aegiseye/export_onnx.py
 
 # 8. Run the program:
-python main.py
+python aegiseye/main.py
 ```
 
 ### Testing
@@ -127,24 +125,24 @@ python main.py
   - **Red box** = accident detected
   - **Yellow boxes** = vehicles identified by Model B
 - Press **q** to quit
-- **After every run: check `clips/` and `reports/`** for the generated blackbox MP4 and incident PDF
+- **After every run: check `Storage/BlackBox-Clips/` and `Storage/Reports/`** for the generated blackbox MP4 and incident PDF
 
 ---
 
 ## 5. How It Actually Works — Feature by Feature
 
 ### F1 — Accident Detection (Model A)
-**File:** `core/detector.py` | **Libraries:** `ultralytics` (YOLO), `onnxruntime`
+**File:** `aegiseye/core/detector.py` | **Libraries:** `ultralytics` (YOLO), `onnxruntime`
 
 Model A is a YOLO11m object detection model trained on ~34,600 CCTV accident images (multiple merged datasets, trained on Kaggle dual T4 GPUs). It classifies regions of each frame as `accident` or `noaccident`. It runs on every Nth frame (default: every 15th). If confidence > 0.5 for the `accident` class, the full incident pipeline triggers.
 
 ### F2 — Vehicle Recognition (Model B)
-**File:** `core/detector.py` (called after Model A) | **Libraries:** `ultralytics`, `onnxruntime`
+**File:** `aegiseye/core/detector.py` (called after Model A) | **Libraries:** `ultralytics`, `onnxruntime`
 
 Model B is a YOLO11m model trained in two sessions on Pakistani vehicle datasets (rickshaws, bikes, cars, trucks, buses etc). It ONLY runs on frames where Model A detected an accident — this saves massive processing since Model B might run 3 times in a whole video while Model A runs hundreds of times. If Model B finds no vehicles on the crash frame (common — vehicles are mangled/overlapping post-impact), it falls back to checking 3 sampled pre-crash frames from the buffer where vehicles were still distinct.
 
 ### F3 — Severity Engine
-**File:** `core/severity.py` | **Libraries:** `opencv-python` (cv2), `numpy`
+**File:** `aegiseye/core/severity.py` | **Libraries:** `opencv-python` (cv2), `numpy`
 
 **NOT a neural network** — pure computer vision math. Uses Farneback optical flow (`cv2.calcOpticalFlowFarneback`) on the pre-crash frames to measure pixel motion, focused on the region around the accident bounding box (+40px padding). Combines four weighted components:
 
@@ -158,22 +156,22 @@ Model B is a YOLO11m model trained in two sessions on Pakistani vehicle datasets
 Weighted score ≥ 0.60 → **High**, ≥ 0.35 → **Medium**, else **Low**. The full breakdown prints to terminal on every detection so you can verify the math.
 
 ### F4 — Digital Blackbox
-**File:** `core/blackbox.py` + `core/buffer.py` | **Libraries:** `imageio-ffmpeg` (bundled FFmpeg), `collections.deque`
+**File:** `aegiseye/core/blackbox.py` + `aegiseye/core/buffer.py` | **Libraries:** `imageio-ffmpeg` (bundled FFmpeg), `collections.deque`
 
-`buffer.py` keeps the last 10 seconds of frames in memory at all times using a `deque` with maxlen — old frames automatically fall out as new ones enter. When an accident triggers, `blackbox.py` pipes those frames to FFmpeg and encodes an H.264 MP4 (plays everywhere, small file size). Result: an automatic 10-second pre-crash clip, like an aircraft blackbox.
+`buffer.py` keeps the last 10 seconds of frames in memory at all times using a `deque` with maxlen — old frames automatically fall out as new ones enter. When an accident triggers, `blackbox.py` pipes those frames to FFmpeg and encodes an H.264 MP4 (plays everywhere, small file size). Result: an automatic 10-second pre-crash clip, like an aircraft blackbox. Saved to `Storage/BlackBox-Clips/`.
 
 ### F5 — Emergency Alert
-**File:** `services/alert.py` | **Libraries:** `twilio`
+**File:** `aegiseye/services/alert.py` | **Libraries:** `twilio`
 
 Sends an SMS with severity, vehicles involved, GPS coordinates, and timestamp. Currently `TWILIO_ENABLED = False` (simulated — prints what it WOULD send). To go live: create a free Twilio account, put credentials in `config.py`, flip the flag.
 
 ### F6 — Insurance PDF Report
-**File:** `services/report.py` | **Libraries:** `fpdf2`
+**File:** `aegiseye/services/report.py` | **Libraries:** `fpdf2`
 
-Auto-generates a professional PDF per incident: timestamp, camera ID, GPS, severity + breakdown, vehicles, confidence, and a **clickable hyperlink** to the blackbox clip. Saved to `reports/`.
+Auto-generates a professional PDF per incident: timestamp, camera ID, GPS, severity + breakdown, vehicles, confidence, and a **clickable hyperlink** to the blackbox clip. Saved to `Storage/Reports/`.
 
 ### Video Selector + Settings (temporary UI)
-**File:** `main.py` | **Libraries:** `tkinter` (built into Python)
+**File:** `aegiseye/main.py` | **Libraries:** `tkinter` (built into Python)
 
 Dark-themed popup listing videos in `test_videos/` sorted newest-first, with Browse button, Frame Skip and Display Delay settings, Save as Default (persists to `settings.json`), and Reset. **This is a rough placeholder** — real UI/UX design happens in the web dashboard (F7).
 
@@ -224,7 +222,7 @@ Like live TV: what you see on screen is a few seconds behind reality, and nobody
 ## 7. Control Flow — One Full Run
 
 ```
-python main.py
+python aegiseye/main.py
   └→ tkinter popup: select video, adjust settings (optional)
       └→ run_detection_loop(camera)
           ├→ load Model A + B (ONNX if available, else .pt)
@@ -237,9 +235,9 @@ python main.py
           │     │           ├→ Model B on full-res frame → vehicles
           │     │           │    └→ if empty: check 3 pre-crash buffer frames
           │     │           ├→ severity.py → Low/Medium/High + breakdown
-          │     │           ├→ blackbox.py → save 10-sec MP4 to clips/
+          │     │           ├→ blackbox.py → save 10-sec MP4 to Storage/BlackBox-Clips/
           │     │           ├→ alert.py → SMS (simulated)
-          │     │           ├→ report.py → PDF to reports/
+          │     │           ├→ report.py → PDF to Storage/Reports/
           │     │           └→ draw red + yellow boxes → display_q
           │     └→ other frames: draw last known boxes → display_q
           └→ start DISPLAY thread   — plays display_q at real FPS, 3s behind
@@ -270,11 +268,11 @@ python main.py
 ## 9. What's Next — Work Queue (in order)
 
 1. **F7 Web Dashboard** — THE big remaining task and our defense centerpiece:
-   - Backend: extend `api/server.py` (FastAPI) — live feed endpoint, incident history, clip/report downloads
+   - Backend: extend `aegiseye/api/server.py` (FastAPI) — live feed endpoint, incident history, clip/report downloads
    - Frontend: proper UI/UX design needed (React, or Reflex if staying all-Python). Design first, then build.
    - Must show: live feed with boxes, alert history table, severity badges, download buttons
 2. **Real Twilio SMS** — create account, add credentials, flip `TWILIO_ENABLED = True`, test on a real phone
-3. **F8 Multi-Camera** — test the threading path in `main.py` with 2+ video sources, then show all feeds in dashboard
+3. **F8 Multi-Camera** — test the threading path in `aegiseye/main.py` with 2+ video sources, then show all feeds in dashboard
 4. **Demo prep** — pick the 2-3 best test videos, rehearse the full flow: detection → alert → clip → report → dashboard
 
 ---
@@ -282,12 +280,13 @@ python main.py
 ## 10. Demo Day Quick Reference
 
 The flow to show examiners:
-1. Run `python main.py`, pick a test video
+1. Run `python aegiseye/main.py`, pick a test video
 2. Point out green boxes (normal) → red box appears (accident) → yellow boxes (vehicles)
 3. Show terminal: severity breakdown printed live
-4. Open `clips/` — play the auto-saved pre-crash blackbox clip
-5. Open `reports/` — show the PDF with clickable clip link
+4. Open `Storage/BlackBox-Clips/` — play the auto-saved pre-crash blackbox clip
+5. Open `Storage/Reports/` — show the PDF with clickable clip link
 6. (Once Twilio is live) show the SMS arriving on a phone
 7. (Once dashboard is done) show everything in the web UI
 
 Talking points: models never saw these videos (YouTube test footage), detects Pakistani vehicles (rickshaws, Honda 125), runs on ordinary laptops with no GPU (ONNX + broadcast delay optimization).
+

@@ -34,7 +34,7 @@
                 │  Classes: 2 (accident, noaccident)   │
                 │  Architecture: YOLO11m               │
                 │  Trained on: Severity + NTA merged   │
-                │  File: model_A_v2_best.pt            │
+                │  File: models/model_A_v2_best.pt     │
                 └──────────────────┬───────────────────┘
                                    |
                                    |── noaccident → do nothing, grab next frame, loop
@@ -56,7 +56,7 @@
                 │  Architecture: YOLO11m               │
                 │  Trained on: Rickshaw Accident +     │
                 │    Auto-RickshawImageBD + Sorokh-Poth│
-                │  File: model_B_best.pt               │
+                │  File: models/model_B_best.pt        │
                 └──────────────────┬───────────────────┘
                                    |
                                    | combined output at this point:

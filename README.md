@@ -22,27 +22,38 @@ pip install -r requirements.txt
 # 4. Add a test video to test_videos/
 #    (or change config.py to use a webcam/IP camera)
 
-# 5. Run
-python main.py
+# 5. Run AegisEye
+python aegiseye/main.py
 ```
 
 ## Project Structure
 
 ```
-aegiseye/
-├── models/          ← trained YOLO .pt files (from Kaggle)
-├── core/            ← detection loop, buffer, severity, blackbox
-├── services/        ← Twilio alerts, PDF reports
-├── api/             ← FastAPI dashboard backend
-├── frontend/        ← React or Reflex dashboard UI
-├── clips/           ← auto-saved blackbox MP4 clips
-├── reports/         ← auto-saved PDF incident reports
-├── config.py        ← all settings in one place
-└── main.py          ← run this
+c:\Users\mabub\Aegis-Eye\
+├── aegiseye/                            <-- Core Backend Package
+│   ├── api/                             <-- FastAPI Endpoints (server.py)
+│   ├── core/                            <-- AI Core Pipeline (detector, buffer, severity, blackbox)
+│   ├── services/                        <-- Alerts & Reports (alert, report)
+│   ├── config.py                        <-- Central Config
+│   ├── export_onnx.py                   <-- ONNX Converter Script
+│   └── main.py                          <-- Application Entry Point & Launcher
+│
+├── FrontEnd/                            <-- Web Dashboard UI (React / Reflex for F7)
+├── Documentation/                       <-- Architecture Docs & Training Notebooks
+├── models/                              <-- Trained YOLO11m weights (.pt & .onnx)
+├── Storage/                             <-- Generated Runtime Outputs (git-ignored)
+│   ├── BlackBox-Clips/                  <-- Auto-saved 10s pre-crash MP4 clips
+│   ├── Reports/                         <-- Auto-generated PDF insurance reports
+│   └── Logs/                            <-- Execution logs
+├── test_videos/                         <-- Test video feeds (24 files)
+├── CHANGELOG.md                         <-- Version history
+├── requirements.txt                     <-- Dependencies
+└── Tree.txt                             <-- Complete directory map
 ```
 
 ## Team
 
 - Muhammad Abu Bakar
-- Daniyal & Team
+- Mian Daniyal Hassan    
+- Hammad Ur Rehman
 - Supervisor: Sir Majid Hussain

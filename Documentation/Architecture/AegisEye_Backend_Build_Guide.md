@@ -22,31 +22,35 @@ pip install ultralytics opencv-python fastapi uvicorn fpdf2 twilio ffmpeg-python
 ```
 
 **Why no Anaconda/Jupyter?**  
-Notebooks are for experiments and training (Kaggle). You're building a real application now — that means `.py` files, a proper folder structure, and running from the terminal with `python main.py`.
+Notebooks are for experiments and training (Kaggle). You're building a real application now — that means `.py` files, a proper folder structure, and running from the terminal with `python aegiseye/main.py`.
 
 ---
 
 ## Folder Structure
 
 ```
-aegiseye/
-├── models/
-│   ├── model_A_v2_best.pt        ← download from Kaggle output
-│   └── model_B_best.pt           ← download from Kaggle output
-├── core/
-│   ├── detector.py               ← Step 1: core loop (Model A → Model B)
-│   ├── buffer.py                 ← Step 2: rolling 10-sec frame buffer
-│   ├── severity.py               ← Step 3: optical flow severity engine
-│   └── blackbox.py               ← Step 4: dump buffer to MP4
-├── services/
-│   ├── alert.py                  ← Step 5: Twilio SMS/call
-│   └── report.py                 ← Step 6: PDF insurance report
-├── api/
-│   ├── server.py                 ← Step 7: FastAPI backend
-│   └── routes.py                 ← API endpoints
-├── frontend/                     ← Step 7: React or Reflex UI
-├── config.py                     ← camera URLs, GPS coords, thresholds
-├── main.py                       ← entry point — runs everything
+c:\Users\mabub\Aegis-Eye\
+├── aegiseye/                            <-- Backend Python Package
+│   ├── api/                             <-- Step 7: FastAPI backend (server.py)
+│   ├── core/                            <-- Core Detection Pipeline
+│   │   ├── detector.py                  <-- Step 1: core loop (Model A → Model B)
+│   │   ├── buffer.py                    <-- Step 2: rolling 10-sec frame buffer
+│   │   ├── severity.py                  <-- Step 3: optical flow severity engine
+│   │   └── blackbox.py                  <-- Step 4: dump buffer to MP4
+│   ├── services/                        <-- External Services
+│   │   ├── alert.py                     <-- Step 5: Twilio SMS/call
+│   │   └── report.py                    <-- Step 6: PDF insurance report
+│   ├── config.py                        <-- camera URLs, GPS coords, thresholds
+│   ├── export_onnx.py                   <-- ONNX converter script
+│   └── main.py                          <-- entry point — runs everything
+├── FrontEnd/                            <-- Step 7: React or Reflex UI
+├── Documentation/                       <-- Architecture Docs & Notebooks
+├── models/                              <-- Trained YOLO weights (.pt & .onnx)
+├── Storage/                             <-- Output directory (Clips, Reports, Logs)
+│   ├── BlackBox-Clips/                  <-- Auto-saved 10s pre-crash MP4 clips
+│   ├── Reports/                         <-- Auto-generated PDF insurance reports
+│   └── Logs/                            <-- Logs
+├── test_videos/                         <-- Test video feeds
 ├── requirements.txt
 └── README.md
 ```

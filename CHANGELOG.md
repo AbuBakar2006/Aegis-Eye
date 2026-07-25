@@ -42,7 +42,7 @@
 **Performance impact:**
 (None / FPS before → after / memory / inference time — REQUIRED if detector.py or threading touched)
 
-**Verification checklist (run python main.py on a test video):**
+**Verification checklist (run python aegiseye/main.py on a test video):**
 - [ ] Video displays smoothly with bounding boxes
 - [ ] Accident detection triggers with severity breakdown in terminal
 - [ ] Exactly 1 clip in clips/ + 1 PDF in reports/ per accident
@@ -55,6 +55,31 @@
 ---
 
 ## Entries
+
+### 2026-07-25-01 — Documentation Path & Execution Command Sync
+**Author:** AI Pair Programmer
+**Commit hash / branch:** Backend-Code-V1
+**Feature area:** Documentation
+
+**Files changed:**
+| File | What changed |
+|------|--------------|
+| `README.md` | Updated Quick Start commands to `python aegiseye/main.py` and synced root directory tree |
+| `Documentation/AI_HANDOFF_PROMPT.md` | Updated all file maps, module paths, and output folder locations |
+| `Documentation/Architecture/AegisEye_Backend_Documentation.md` | Updated folder tree, feature status table, code references, and demo commands |
+| `Documentation/Architecture/AegisEye_Backend_Build_Guide.md` | Synced folder tree and execution commands |
+| `Documentation/Architecture/AegisEye_Pipeline.md` | Updated model file locations to `models/` |
+
+**Goal / Aim:**
+Synchronize all repository documentation and build guides with the new standardized folder structure and execution commands.
+
+**What was done (how):**
+Updated all document file paths to reference `aegiseye/main.py`, `aegiseye/core/`, `aegiseye/services/`, `Storage/BlackBox-Clips/`, `Storage/Reports/`, `Storage/Logs/`, and root `models/`.
+
+**Result:**
+- [x] Works as intended
+
+---
 
 ### 2026-07-23-01 — Project Structure Standardization & Path Configuration
 **Author:** AI Pair Programmer
