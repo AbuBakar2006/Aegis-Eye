@@ -156,13 +156,20 @@ def select_video_gui():
             selected_path[0] = path
             root.destroy()
 
+    def on_add_camera():
+        from detect_cameras import launch_camera_setup_gui
+        launch_camera_setup_gui()
+
     listbox.bind("<Double-1>", lambda e: on_run())
 
     tk.Button(btn_frame, text="Browse...", bg=SELBG, fg=FG, activebackground=SELBG,
-              activeforeground=FG, command=on_browse, **btn_style).pack(side=tk.LEFT, padx=5)
+              activeforeground=FG, command=on_browse, **btn_style).pack(side=tk.LEFT, padx=3)
+
+    tk.Button(btn_frame, text="📷 Add Location", bg=SELBG, fg=ACCENT, activebackground=SELBG,
+              activeforeground=ACCENT, command=on_add_camera, **btn_style).pack(side=tk.LEFT, padx=3)
 
     tk.Button(btn_frame, text="Run", bg=ACCENT, fg="#1e1e2e", activebackground="#74c7ec",
-              activeforeground="#1e1e2e", command=on_run, **btn_style).pack(side=tk.LEFT, padx=5)
+              activeforeground="#1e1e2e", command=on_run, **btn_style).pack(side=tk.LEFT, padx=3)
 
     # ── Separator ─────────────────────────────────────────
     tk.Frame(root, bg=SEPARATOR, height=1).pack(fill=tk.X, padx=15, pady=(4, 0))

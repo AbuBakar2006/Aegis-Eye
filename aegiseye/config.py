@@ -28,12 +28,26 @@ if os.path.exists(SETTINGS_FILE):
     FRAME_SKIP = _saved.get("frame_skip", FRAME_SKIP)
     DISPLAY_DELAY_SECONDS = _saved.get("display_delay", DISPLAY_DELAY_SECONDS)
 
+# ── Camera Locations Metadata ──────────────────────────────
+CAMERA_LOCATIONS_FILE = os.path.join(PROJECT_ROOT, "camera_locations.json")
+
+def load_camera_locations():
+    if os.path.exists(CAMERA_LOCATIONS_FILE):
+        with open(CAMERA_LOCATIONS_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+CAMERA_LOCATIONS = load_camera_locations()
+
 # ── Camera(s) ───────────────────────────────────────────────
 CAMERAS = [
     {
         "id": "cam_01",
+        "name": "Canal Bank Road - Gate 1",
+        "location": "Canal Bank Road, Lahore",
         "url": os.path.join(PROJECT_ROOT, "Test_Videos", "sample.mp4"),
         "gps": {"lat": 31.5204, "lng": 74.3587},
+        "maps_url": "https://maps.google.com/?q=31.5204,74.3587"
     },
 ]
 
