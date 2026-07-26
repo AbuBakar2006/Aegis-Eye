@@ -1,0 +1,55 @@
+c:\Users\mabub\Aegis-Eye\                <-- Project Root (Run commands directly from here!)
+│
+├── aegiseye/                            <-- Backend Python Source Package
+│   ├── api/                             <-- FastAPI Endpoints & WebSocket server (F7)
+│   │   ├── __init__.py
+│   │   └── server.py
+│   ├── core/                            <-- Core AI Detection & Video Pipeline
+│   │   ├── __init__.py
+│   │   ├── blackbox.py                  <-- F4: 10s pre-crash MP4 clip generator
+│   │   ├── buffer.py                    <-- Rolling deque frame buffer
+│   │   ├── detector.py                  <-- 3-Thread broadcast delay pipeline (CORE)
+│   │   └── severity.py                  <-- F3: Optical flow crash severity engine
+│   ├── services/                        <-- Alerts & PDF Reporting
+│   │   ├── __init__.py
+│   │   ├── alert.py                     <-- F5: Twilio SMS alert service
+│   │   └── report.py                    <-- F6: Insurance PDF report generator
+│   ├── config.py                        <-- System configuration & path constants
+│   ├── export_onnx.py                   <-- One-time PyTorch → ONNX converter script
+│   └── main.py                          <-- Main launcher & execution entry point
+│
+├── frontend/                            <-- Web Dashboard UI (React / Vite or Reflex for F7)
+│   ├── src/
+│   ├── package.json
+│   └── README.md
+│
+├── models/                              <-- Central location for YOLO11m weights (.pt & .onnx)
+│   ├── model_A_v2_best.pt / .onnx
+│   └── model_B_best.pt / .onnx
+│
+├── docs/                                <-- Central Documentation & Research
+│   ├── architecture/
+│   │   ├── AegisEye_Backend_Documentation.md
+│   │   ├── AegisEye_Pipeline.md
+│   │   └── AegisEye_Backend_Build_Guide.md
+│   ├── notebooks/
+│   │   ├── aegiseye-model-a.ipynb
+│   │   ├── model-b-session2.ipynb
+│   │   └── AegisEye_Model_Comparison.md
+│   ├── AI_HANDOFF_PROMPT.md
+│   └── AegisEye_Starter-Book.pdf
+│
+├── test_videos/                         <-- Test video feeds for evaluation & demo (24 files)
+│   ├── Honda 1.mp4
+│   ├── rickshaw # 1.mp4
+│   └── ...
+│
+├── storage/                             <-- Generated runtime outputs (git-ignored)
+│   ├── clips/                           <-- Auto-saved blackbox MP4 clips
+│   ├── reports/                         <-- Auto-generated PDF insurance reports
+│   └── logs/                            <-- Application execution logs
+│
+├── CHANGELOG.md                         <-- Version history & commit log
+├── requirements.txt                     <-- Python dependencies
+├── settings.json                        <-- App settings (frame_skip, display_delay)
+└── README.md                            <-- Main Project Documentation & Setup Guide
