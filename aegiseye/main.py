@@ -1,67 +1,25 @@
-"""
-AegisEye — Main Entry Point
-
-Usage:
-    python main.py                      (GUI video selector)
-    python main.py Test_Videos/file.mp4 (direct path override)
-"""
-
 import sys
 import os
-import subprocess
 
-# Ensure AegisEye directory is on python path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
-# ── Self-Healing Dependency Check ───────────────────────────
-def _ensure_dependencies():
-    missing = []
-    checks = [
-        ("opencv-python", "cv2"),
-        ("ultralytics", "ultralytics"),
-        ("fastapi", "fastapi"),
-        ("onnxruntime", "onnxruntime"),
-        ("fpdf2", "fpdf"),
-        ("twilio", "twilio"),
-        ("imageio-ffmpeg", "imageio_ffmpeg"),
-    ]
-    for pkg, module in checks:
-        try:
-            __import__(module)
-        except ImportError:
-            missing.append(pkg)
-    
-    if missing:
-        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        req_file = os.path.join(project_root, "requirements.txt")
-        print("\n" + "=" * 65)
-        print(" ⚠️ Missing dependencies detected:", ", ".join(missing))
-        print(" 🔄 Auto-installing required packages from requirements.txt...")
-        print("=" * 65 + "\n")
-        
-        cmd = [sys.executable, "-m", "pip", "install"]
-        if os.path.exists(req_file):
-            cmd.extend(["-r", req_file])
-        else:
-            cmd.extend(missing)
-            
-        try:
-            subprocess.check_call(cmd)
-            print("\n" + "=" * 65)
-            print(" ✅ All dependencies installed successfully! Proceeding...")
-            print("=" * 65 + "\n")
-        except Exception as err:
-            print(f" ❌ Auto-install failed: {err}")
-            print(" Please run manually: pip install -r requirements.txt\n")
+# ── System Dependency Verification ──────────────────────────
+from check_dependencies import check_and_install_dependencies
 
-_ensure_dependencies()
+check_and_install_dependencies()
 
 import json
 import threading
+import importlib
 import tkinter as tk
 from tkinter import filedialog
 import config
-from core.detector import run_detection_loop
+from core.Vehicle_Detector import run_detection_loop
 
 VIDEO_EXTENSIONS = (".mp4", ".avi", ".mkv", ".mov")
 
@@ -156,20 +114,13 @@ def select_video_gui():
             selected_path[0] = path
             root.destroy()
 
-    def on_add_camera():
-        from detect_cameras import launch_camera_setup_gui
-        launch_camera_setup_gui()
-
     listbox.bind("<Double-1>", lambda e: on_run())
 
     tk.Button(btn_frame, text="Browse...", bg=SELBG, fg=FG, activebackground=SELBG,
-              activeforeground=FG, command=on_browse, **btn_style).pack(side=tk.LEFT, padx=3)
-
-    tk.Button(btn_frame, text="📷 Add Location", bg=SELBG, fg=ACCENT, activebackground=SELBG,
-              activeforeground=ACCENT, command=on_add_camera, **btn_style).pack(side=tk.LEFT, padx=3)
+              activeforeground=FG, command=on_browse, **btn_style).pack(side=tk.LEFT, padx=5)
 
     tk.Button(btn_frame, text="Run", bg=ACCENT, fg="#1e1e2e", activebackground="#74c7ec",
-              activeforeground="#1e1e2e", command=on_run, **btn_style).pack(side=tk.LEFT, padx=3)
+              activeforeground="#1e1e2e", command=on_run, **btn_style).pack(side=tk.LEFT, padx=5)
 
     # ── Separator ─────────────────────────────────────────
     tk.Frame(root, bg=SEPARATOR, height=1).pack(fill=tk.X, padx=15, pady=(4, 0))

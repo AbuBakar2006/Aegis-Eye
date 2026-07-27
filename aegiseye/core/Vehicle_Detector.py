@@ -7,18 +7,24 @@ Three threads:
   Display — plays annotated frames at the video's real FPS, ~3s behind processing
 """
 
+from cv2.detail import Estimator
 import cv2
 import os
+import sys
 import time
 import threading
 from queue import Queue, Empty
 from ultralytics import YOLO
 from datetime import datetime
+
+# Ensure AegisEye package directory is on python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.buffer import FrameBuffer
-from core.severity import compute_severity
-from core.blackbox import save_blackbox_clip
-from services.alert import send_alert
-from services.report import generate_report
+from core.Vehicle_Classifier import classify_vehicles
+from core.Severity_Estimator import compute_severity
+from services.Blackbox import save_blackbox_clip
+from services.SMS_Alert import send_alert
+from services.Report import generate_report
 import config
 
 
@@ -106,29 +112,7 @@ def _inference_thread(camera, model_a, model_b, buffer, fps, read_q, display_q, 
 
             # On accident outside cooldown (frame-based) and buffer has enough footage
             if accident_detected and (frame_count - last_alert_frame >= cooldown_frames) and (frame_count >= min_buffer_frames):
-                results_b = model_b(frame, verbose=False)
-                last_boxes_b = results_b[0].boxes
-                last_names_b = results_b[0].names
-
-                vehicles = set()
-                for box in results_b[0].boxes:
-                    conf = float(box.conf[0])
-                    if conf >= config.MODEL_B_CONFIDENCE:
-                        vehicles.add(results_b[0].names[int(box.cls[0])])
-
-                if not vehicles:
-                    pre_frames = buffer.get_frames()
-                    for idx in [len(pre_frames) // 4, len(pre_frames) // 2,
-                                int(len(pre_frames) * 0.75)]:
-                        if 0 <= idx < len(pre_frames):
-                            r = model_b(pre_frames[idx], verbose=False)
-                            for box in r[0].boxes:
-                                if float(box.conf[0]) >= config.MODEL_B_CONFIDENCE:
-                                    vehicles.add(r[0].names[int(box.cls[0])])
-                        if vehicles:
-                            break
-
-                vehicles = list(vehicles)
+                vehicles, last_boxes_b, last_names_b = classify_vehicles(model_b, frame, buffer=buffer)
                 last_alert_frame = frame_count
 
                 event = {

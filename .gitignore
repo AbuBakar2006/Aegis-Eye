@@ -36,3 +36,8 @@ aegiseye-env/
 .idea/
 .DS_Store
 Thumbs.db
+
+#Text files
+Tree.txt
+
+Code_Audit_and_Improvements.md

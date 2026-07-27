@@ -1,55 +1,135 @@
-c:\Users\mabub\Aegis-Eye\                <-- Project Root (Run commands directly from here!)
+C:\Users\mabub\Aegis-Eye\                                <-- Project Root
 │
-├── aegiseye/                            <-- Backend Python Source Package
-│   ├── api/                             <-- FastAPI Endpoints & WebSocket server (F7)
+├── AegisEye/                                            <-- Core Python Backend Package
+│   ├── api/                                             <-- FastAPI Web Dashboard API (F7)
 │   │   ├── __init__.py
-│   │   └── server.py
-│   ├── core/                            <-- Core AI Detection & Video Pipeline
+│   │   └── server.py                                    <-- REST API endpoints for incident clips & reports
+│   ├── core/                                            <-- Core AI Detection & Computer Vision Engine
 │   │   ├── __init__.py
-│   │   ├── blackbox.py                  <-- F4: 10s pre-crash MP4 clip generator
-│   │   ├── buffer.py                    <-- Rolling deque frame buffer
-│   │   ├── detector.py                  <-- 3-Thread broadcast delay pipeline (CORE)
-│   │   └── severity.py                  <-- F3: Optical flow crash severity engine
-│   ├── services/                        <-- Alerts & PDF Reporting
+│   │   ├── Severity-Estimator.py                        <-- F3: Farneback optical flow crash severity engine
+│   │   ├── Vehicle-Classifier.py                        <-- F2: Model B vehicle classifier engine
+│   │   ├── Vehicle-Detector.py                          <-- F1: Model A accident detector & 3-thread engine (CORE)
+│   │   └── buffer.py                                    <-- Rolling deque frame buffer (10s buffer)
+│   ├── services/                                        <-- End-User Output & Delivery Services
 │   │   ├── __init__.py
-│   │   ├── alert.py                     <-- F5: Twilio SMS alert service
-│   │   └── report.py                    <-- F6: Insurance PDF report generator
-│   ├── config.py                        <-- System configuration & path constants
-│   ├── export_onnx.py                   <-- One-time PyTorch → ONNX converter script
-│   └── main.py                          <-- Main launcher & execution entry point
+│   │   ├── Blackbox.py                                  <-- F4: 10s pre-crash H.264 MP4 clip generation service
+│   │   ├── Report.py                                    <-- F6: Automated PDF insurance report service
+│   │   └── SMS-Alert.py                                 <-- F5: Twilio SMS emergency alert service
+│   ├── check_dependencies.py                            <-- System environment & dependency verification tool
+│   ├── config.py                                        <-- System configuration & path constants
+│   ├── detect_cameras.py                                <-- Camera auto-detection & location setup tool
+│   ├── export_onnx.py                                   <-- PyTorch (.pt) → ONNX converter script
+│   └── main.py                                          <-- Main entry point (Self-healing launcher & GUI)
 │
-├── frontend/                            <-- Web Dashboard UI (React / Vite or Reflex for F7)
-│   ├── src/
-│   ├── package.json
-│   └── README.md
+├── FrontEnd/                                            <-- Web Dashboard UI (React / HTML / JS for F7)
 │
-├── models/                              <-- Central location for YOLO11m weights (.pt & .onnx)
-│   ├── model_A_v2_best.pt / .onnx
-│   └── model_B_best.pt / .onnx
+├── Models/                                              <-- Trained YOLO11m weights (.pt & .onnx)
+│   ├── model_A_v2_best.pt / .onnx                       <-- Model A: Accident detector
+│   ├── model_B_best.pt / .onnx                          <-- Model B: Vehicle classifier
+│   └── Instruction.md
 │
-├── docs/                                <-- Central Documentation & Research
-│   ├── architecture/
+├── Documentation/                                       <-- Project Documentation & Research
+│   ├── Architecture/
 │   │   ├── AegisEye_Backend_Documentation.md
 │   │   ├── AegisEye_Pipeline.md
 │   │   └── AegisEye_Backend_Build_Guide.md
-│   ├── notebooks/
-│   │   ├── aegiseye-model-a.ipynb
-│   │   ├── model-b-session2.ipynb
-│   │   └── AegisEye_Model_Comparison.md
-│   ├── AI_HANDOFF_PROMPT.md
-│   └── AegisEye_Starter-Book.pdf
+│   ├── NoteBooks/                                       <-- Kaggle dual T4 GPU training notebooks
+│   │   ├── aegiseye-model-a (2).ipynb
+│   │   └── model-b-session2 compete.ipynb
+│   └── AI_HANDOFF_PROMPT.md
 │
-├── test_videos/                         <-- Test video feeds for evaluation & demo (24 files)
+├── Test_Videos/                                         <-- Test video feeds for evaluation & demo (23 files)
+│   ├── sample.mp4
 │   ├── Honda 1.mp4
 │   ├── rickshaw # 1.mp4
 │   └── ...
 │
-├── storage/                             <-- Generated runtime outputs (git-ignored)
-│   ├── clips/                           <-- Auto-saved blackbox MP4 clips
-│   ├── reports/                         <-- Auto-generated PDF insurance reports
-│   └── logs/                            <-- Application execution logs
+├── Storage/                                             <-- Generated runtime outputs
+│   ├── BlackBox-Clips/                                  <-- Auto-saved 10-second blackbox MP4 clips
+│   ├── Reports/                                         <-- Auto-generated PDF insurance reports
+│   └── Logs/                                            <-- Application execution logs
 │
-├── CHANGELOG.md                         <-- Version history & commit log
-├── requirements.txt                     <-- Python dependencies
-├── settings.json                        <-- App settings (frame_skip, display_delay)
-└── README.md                            <-- Main Project Documentation & Setup Guide
+├── camera_locations.json                                <-- External JSON registry for camera locations & GPS
+├── settings.json                                        <-- User app settings (frame_skip, display_delay)
+├── requirements.txt                                     <-- Master Python dependency list
+├── .gitignore                                           <-- Git exclusions for large binaries & outputs
+├── CHANGELOG.md                                         <-- Version history & commit log
+├── README.md                                            <-- Main Project Documentation & Setup Guide
+└── Tree.txt                                             <-- Repository tree & component breakdown guide
+
+
+================================================================================
+                         FILE FUNCTION & RESPONSIBILITY MATRIX                  
+================================================================================
+
+1. AegisEye/main.py
+   Main system entry point. Handles self-healing startup dependency checks 
+   (_ensure_dependencies), launches the dark-themed video selector GUI 
+   (Run, Browse, 📷 Add Location), and spawns parallel threads for camera feeds.
+
+2. AegisEye/config.py
+   Central system configuration module. Dynamically sets absolute paths for 
+   PROJECT_ROOT, Models/, Test_Videos/, Storage/, Twilio SMS credentials, and 
+   parses camera_locations.json metadata.
+
+3. AegisEye/detect_cameras.py
+   Interactive camera setup tool. Scans hardware webcams (0..3) & phone streams 
+   (IP Webcam / DroidCam), tests live stream connections, prompts for street 
+   address & GPS coordinates, and saves records into camera_locations.json.
+
+4. AegisEye/export_onnx.py
+   One-time model conversion utility. Exports PyTorch (.pt) models to ONNX 
+   format (.onnx) for 2–4x faster CPU inference.
+
+5. AegisEye/core/detector.py
+   Core 3-thread pipeline (Reader, Infer, Display). Handles Model A accident 
+   detection at native 640 quality every 15 frames, Model B vehicle 
+   classification, 3-second broadcast delay, and foreground window focus.
+
+6. AegisEye/core/buffer.py
+   Thread-safe circular frame buffer (FrameBuffer) using collections.deque. 
+   Continuously retains the last 10 seconds of raw video frames prior to a crash.
+
+7. AegisEye/core/severity.py
+   Optical flow severity scoring engine (compute_severity). Uses OpenCV 
+   Farneback optical flow to measure motion vectors and calculate accident 
+   severity (0.0 to 1.0).
+
+8. AegisEye/core/blackbox.py
+   Blackbox clip recorder (save_blackbox_clip). Takes the 10-second pre-crash 
+   buffer and encodes it into a compressed H.264 MP4 file saved in Storage/BlackBox-Clips/.
+
+9. AegisEye/services/alert.py
+   Emergency SMS alert service (send_alert). Integrates Twilio API to dispatch 
+   immediate SMS alerts with camera name, street location, vehicles involved, 
+   timestamp, and a Google Maps navigation link.
+
+10. AegisEye/services/report.py
+    Automated insurance PDF generator (generate_report). Uses fpdf2 to construct 
+    formal PDF reports with severity score breakdowns, camera GPS, and clickable 
+    clip links saved in Storage/Reports/.
+
+11. AegisEye/api/server.py
+    FastAPI backend REST API server (app). Exposes endpoints (/api/incidents, 
+    /api/incidents/{id}/clip, /api/incidents/{id}/report) for the Web Dashboard interface.
+
+12. camera_locations.json
+    External JSON database containing metadata for all camera locations (IDs, 
+    names, street addresses, stream URLs, GPS coordinates, Google Maps links).
+
+13. settings.json
+    Stores user-configured local runtime overrides (frame_skip, display_delay).
+
+14. requirements.txt
+    Master Python package dependency list specifying exact versions for all libraries.
+
+15. .gitignore
+    Git exclusion rules for large binary models, test videos, virtual environments, 
+    and generated outputs.
+
+16. CHANGELOG.md
+    Chronological development log documenting all feature additions, bug fixes, 
+    and structural changes.
+
+17. README.md
+    Primary setup and operational guide for the repository.

@@ -1,13 +1,24 @@
+# Core Computer Vision & AI Inference
 ultralytics>=8.2.0
 opencv-python>=4.9.0
 numpy>=1.26.0
-fastapi>=0.111.0
-uvicorn[standard]>=0.30.0
-fpdf2>=2.7.0
-twilio>=9.0.0
-ffmpeg-python>=0.2.0
-imageio-ffmpeg>=0.5.0
-python-multipart>=0.0.9
-psutil>=5.9.0
 onnxruntime>=1.17.0
 onnx>=1.15.0
+
+# FastAPI Backend & Web Server
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+requests>=2.31.0
+
+# Video Encoding & Media Storage
+ffmpeg-python>=0.2.0
+imageio-ffmpeg>=0.5.0
+Pillow>=10.0.0
+
+# Emergency Alerts & PDF Reports
+twilio>=9.0.0
+fpdf2>=2.7.0
+
+# Hardware & System Utilities
+psutil>=5.9.0
