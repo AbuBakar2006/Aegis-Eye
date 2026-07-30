@@ -1,0 +1,28 @@
+[
+  {
+    "frame_number": 195,
+    "confidence": 0.658959150314331,
+    "severity": "High",
+    "severity_breakdown": {
+      "motion_spike": 0.632,
+      "accident_confidence": 0.659,
+      "motion_magnitude": 1.0,
+      "vehicle_bonus": 0.333,
+      "weighted_score": 0.684
+    },
+    "vehicles": [
+      "motorcycle"
+    ],
+    "gps": {
+      "lat": 31.3656,
+      "lng": 74.219
+    },
+    "camera_name": "Cam_01",
+    "maps_url": "https://maps.app.goo.gl/9DiELhuFk6LWFsVR8",
+    "timestamp": "2026-07-30T13:52:15.686882",
+    "buffer_range": {
+      "start_frame": 1,
+      "end_frame": 195
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "frame_number": 150,
+    "confidence": 0.5227822661399841,
+    "severity": "Medium",
+    "severity_breakdown": {
+      "motion_spike": 0.514,
+      "accident_confidence": 0.523,
+      "motion_magnitude": 0.703,
+      "vehicle_bonus": 0.667,
+      "weighted_score": 0.57
+    },
+    "vehicles": [
+      "truck",
+      "bus"
+    ],
+    "gps": {
+      "lat": 31.3656,
+      "lng": 74.219
+    },
+    "camera_name": "Cam_01",
+    "maps_url": "https://maps.app.goo.gl/9DiELhuFk6LWFsVR8",
+    "timestamp": "2026-07-30T19:13:14.345837",
+    "buffer_range": {
+      "start_frame": 1,
+      "end_frame": 150
+    }
+  }
+]

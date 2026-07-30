@@ -1,0 +1,43 @@
+# Models (too large for GitHub — download from Kaggle)
+Models/*.pt
+Models/*.onnx
+Models/*.engine
+*.pt
+*.onnx
+
+# Test Videos (heavy binaries)
+Test_Videos/*.mp4
+Test_Videos/*.avi
+Test_Videos/*.mov
+
+# Storage outputs
+Storage/BlackBox-Clips/*
+!Storage/BlackBox-Clips/.gitkeep
+Storage/Reports/*
+!Storage/Reports/.gitkeep
+Storage/Logs/*
+!Storage/Logs/.gitkeep
+
+# User Local Overrides
+settings.json
+
+# Datasets
+/datasets/
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+aegiseye-env/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+#Text files
+Tree.txt
+
+Code_Audit_and_Improvements.md

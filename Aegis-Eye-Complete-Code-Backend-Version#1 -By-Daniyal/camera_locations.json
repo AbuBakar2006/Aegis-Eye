@@ -1,0 +1,26 @@
+[
+  {
+    "camera_id": "CAM-001",
+    "camera_name": "Canal Bank Road - Gate 1",
+    "address": "Canal Bank Road, North Junction, Lahore, Pakistan",
+    "latitude": 31.5204,
+    "longitude": 74.3587,
+    "google_maps_url": "https://maps.google.com/?q=31.5204,74.3587"
+  },
+  {
+    "camera_id": "CAM-002",
+    "camera_name": "Mall Road Intersection",
+    "address": "Mall Road / Lower Mall Crossing, Lahore, Pakistan",
+    "latitude": 31.5601,
+    "longitude": 74.3152,
+    "google_maps_url": "https://maps.google.com/?q=31.5601,74.3152"
+  },
+  {
+    "camera_id": "CAM-003",
+    "camera_name": "Ferozepur Road Flyover",
+    "address": "Ferozepur Road Flyover, Lahore, Pakistan",
+    "latitude": 31.4822,
+    "longitude": 74.3210,
+    "google_maps_url": "https://maps.google.com/?q=31.4822,74.3210"
+  }
+]
