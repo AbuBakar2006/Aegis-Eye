@@ -92,7 +92,7 @@ C:\Users\mabub\Aegis-Eye\
 
 ### Team
 
-- Muhammad Abu Bakar
-- Mian Daniyal Hassan    
+- Mian Daniyal Hassan
+- Muhammad Abu Bakar    
 - Hammad Ur Rehman
 - Supervisor: Sir Majid Hussain
