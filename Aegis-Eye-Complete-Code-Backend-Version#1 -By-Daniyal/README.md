@@ -4,8 +4,6 @@ University of Lahore • FYP 2026
 
 ## Quick Start
 
-## 1. How to Set Up & Run AegisEye
-
 ### Step 1 — Clone the Repository
 
 ```bash
