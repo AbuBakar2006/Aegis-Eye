@@ -16,7 +16,7 @@ git checkout Code-Improvement
 
 The trained YOLO11m model weights are too large for GitHub. Download them from Google Drive:
 
-**Google Drive Link:** https://github.com/AbuBakar2006/Aegis-Eye
+**Google Drive Link:** [https://github.com/AbuBakar2006/Aegis-Eye](https://drive.google.com/drive/folders/1LOUq7mvtVUM8gWVSTGAuByWCJqiBAZK1?usp=sharing)
 
 Download both files and place them in the `models/` folder. Rename them:
 
