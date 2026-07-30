@@ -5,25 +5,68 @@ University of Lahore • FYP 2026
 ## Quick Start
 
 ```bash
-# 1. Create virtual environment
-python -m venv aegiseye-env
-# Windows:
-aegiseye-env\Scripts\activate
-# Mac/Linux:
-source aegiseye-env/bin/activate
 
-# 2. Install dependencies
-pip install -r requirements.txt
+## 1. How to Set Up & Run AegisEye
 
-# 3. Add your trained models to models/ folder:
-#    - models/model_A_v2_best.pt
-#    - models/model_B_best.pt
+### Step 1 — Clone the Repository
 
-# 4. Add a test video to test_videos/
-#    (or change config.py to use a webcam/IP camera)
+```bash
+git clone https://github.com/AbuBakar2006/Aegis-Eye.git
+cd Aegis-Eye
+git checkout Code-Improvement
+```
 
-# 5. Run AegisEye
+### Step 2 — Download Model Files
+
+The trained YOLO11m model weights are too large for GitHub. Download them from Google Drive:
+
+**Google Drive Link:** https://github.com/AbuBakar2006/Aegis-Eye
+
+Download both files and place them in the `models/` folder. Rename them:
+
+| Downloaded File | Rename To | Place In |
+|----------------|-----------|----------|
+| `model_A_v2_best.pt` | `Model_A.pt` | `models/` |
+| `model_B_best.pt` | `Model_B.pt` | `models/` |
+
+Optional (recommended for 2-4x faster CPU inference):
+```bash
+python aegiseye/export_onnx.py
+```
+This creates `Model_A.onnx` and `Model_B.onnx` alongside the `.pt` files.
+
+### Step 3 — Run System Check
+
+```bash
+python aegiseye/check_dependencies.py
+```
+
+This does three things automatically:
+1. Checks if all required Python libraries are installed (offers to install missing ones)
+2. Verifies every file in every folder is present and accounted for
+3. Confirms model files exist and suggests ONNX export if not done
+
+The output looks like:
+```
+═══════════════════════════════════════════
+  AegisEye System Check — Summary
+═══════════════════════════════════════════
+  Dependencies:    12/12 installed        [OK]
+  Source Files:    19/19 present          [OK]
+  Model Files:    ONNX available          [OK]
+  Storage Dirs:   4/4 ready               [OK]
+  Test Videos:    16 files found          [OK]
+═══════════════════════════════════════════
+  Status: READY TO RUN
+  Launch: python aegiseye/main.py
+═══════════════════════════════════════════
+```
+
+### Step 4 — Run AegisEye
+
+```bash
 python aegiseye/main.py
+```
 ```
 
 ## Project Structure
