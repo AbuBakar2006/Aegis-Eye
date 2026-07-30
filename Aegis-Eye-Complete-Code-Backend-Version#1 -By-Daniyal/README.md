@@ -67,8 +67,8 @@ python aegiseye/main.py
 
 ## Project Structure
 
-```
-c:\Users\mabub\Aegis-Eye\
+```text
+C:\Users\mabub\Aegis-Eye\
 ├── aegiseye/                            <-- Core Backend Package
 │   ├── api/                             <-- FastAPI Endpoints (server.py)
 │   ├── core/                            <-- AI Core Pipeline (detector, buffer, severity, blackbox)
