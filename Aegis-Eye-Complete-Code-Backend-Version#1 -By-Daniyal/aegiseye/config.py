@@ -31,11 +31,13 @@ if os.path.exists(SETTINGS_FILE):
 # ── Camera Locations Metadata ──────────────────────────────
 CAMERA_LOCATIONS_FILE = os.path.join(PROJECT_ROOT, "camera_locations.json")
 
+
 def load_camera_locations():
     if os.path.exists(CAMERA_LOCATIONS_FILE):
         with open(CAMERA_LOCATIONS_FILE, "r") as f:
             return json.load(f)
     return []
+
 
 CAMERA_LOCATIONS = load_camera_locations()
 
@@ -47,15 +49,15 @@ CAMERAS = [
         "location": "1-KM Defence Road, Lahore",
         "url": os.path.join(PROJECT_ROOT, "Test_Videos", "sample.mp4"),
         "gps": {"lat": 31.3656, "lng": 74.2190},
-        "maps_url": "https://maps.app.goo.gl/9DiELhuFk6LWFsVR8"
+        "maps_url": "https://maps.app.goo.gl/9DiELhuFk6LWFsVR8",
     },
 ]
 
 # ── Twilio (Emergency Alerts) ──────────────────────────────
-TWILIO_SID = "ACb58698f90965cd474c06f571e340f9ba"
-TWILIO_TOKEN = "cb223df2c4e598b18d27bb590b231978"
-TWILIO_FROM = "+12393425903"
-EMERGENCY_TO = "+923467665411"
+TWILIO_SID = ""
+TWILIO_TOKEN = ""
+TWILIO_FROM = "+"
+EMERGENCY_TO = "+"
 
 # ── Output Directories ─────────────────────────────────────
 CLIPS_DIR = os.path.join(PROJECT_ROOT, "Storage", "BlackBox-Clips")
