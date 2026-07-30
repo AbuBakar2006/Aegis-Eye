@@ -9,7 +9,7 @@ University of Lahore • FYP 2026
 ```bash
 git clone https://github.com/AbuBakar2006/Aegis-Eye.git
 cd Aegis-Eye
-git checkout Code-Improvement
+git checkout Aegis-Eye-Complete-Code-Backend-Version-1
 ```
 
 ### Step 2 — Download Model Files
